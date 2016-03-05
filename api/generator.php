@@ -3,10 +3,10 @@
 if (file_get_contents("php://input")) {
     $elmArray = (file_get_contents("php://input"));
     $elmArray = json_decode($elmArray);
-    foreach($elmArray as $obj){
+    foreach ($elmArray as $obj) {
         getParams($obj);
     }
-    
+
 } else {
     echo 'null';
 }
@@ -19,6 +19,7 @@ function getParams($domElements)
     $controller = "";
     $service = "";
     $factory = "";
+    $dependencies = [];
     $url = "";
 
     for ($i = 0; $i < sizeof($domElements); $i++) {
@@ -39,9 +40,23 @@ function getParams($domElements)
             if ($key == 'url') {
                 $url = $val;
             }
+            if ($key == 'dependencies') {
+                $dependencies[$i] = $val;
+            }
         }
     }
-    $code .= 'angular.module("' . $module . '" , [])' . "\n\t\t";
+    $depString = "";
+    $len = count($dependencies);
+    $i = 0;
+    foreach ($dependencies as $depend) {
+        $i++;
+        $depString .= "'" . $depend . "'";
+
+        if ($i < $len) {
+            $depString .= ", ";
+        };
+    }
+    $code .= 'angular.module("' . $module . '" , [' . $depString . '])' . "\n\t\t";
     $code .= '.controller("' . $controller . '" , function ($scope,' . $service . '){
         })' . "\n\t\t";
     $code .= '.factory("' . $factory . '" , function($resource){
@@ -54,7 +69,7 @@ function getParams($domElements)
             return self;
         })';
 
-
+    //var_dump($dependencies);
     $response['message'] = ($code);
     echo json_encode($response);
 }
