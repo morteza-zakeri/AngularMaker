@@ -1,5 +1,5 @@
 # AngularMaker Version 0.4 Alpha
-<a href="http://mortezazakeri.com/angular/">Demo</a> </hr>
+<a href="http://mortezazakeri.com/angular/">Demo</a> <br>
 New Demo version , new advanced future will be added
 
 This simple php file make a basic of angular file structure for developing faster and cleaner
